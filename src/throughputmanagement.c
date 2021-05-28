@@ -147,9 +147,6 @@ void run_ntttcp_throughput_management(struct ntttcp_test_endpoint *tep)
 	/* 2) now, let's run the real test duration */
 	elapsed_sec = 0;		/* reset the counter */
 	last_checkpoint.bytes = 0;	/* the counters in streams have been reset to 0 above */
-	gettimeofday(&now, NULL);	/* reset the timestamp to now */
-	last_checkpoint.time = now;
-	tep->start_time = now;
 
 	/* calculate the initial resource usage */
 	get_cpu_usage( tep->results->init_cpu_usage );
@@ -158,6 +155,10 @@ void run_ntttcp_throughput_management(struct ntttcp_test_endpoint *tep)
 	tep->results->init_tx_packets = get_single_value_from_os_file(tep->test->show_interface_packets, "tx");
 	tep->results->init_rx_packets = get_single_value_from_os_file(tep->test->show_interface_packets, "rx");
 	tep->results->init_interrupts = get_interrupts_from_proc_by_dev(tep->test->show_dev_interrupts);
+
+	gettimeofday(&now, NULL);	/* reset the timestamp to now */
+	last_checkpoint.time = now;
+	tep->start_time = now;
 
 	while(is_light_turned_on()) {
 		/* Wait 500 micro-seconds. We don't want to pull the status too often.
@@ -185,6 +186,9 @@ void run_ntttcp_throughput_management(struct ntttcp_test_endpoint *tep)
 			break;
 	}
 
+	gettimeofday(&now, NULL);
+	tep->end_time = now;
+
 	/* calculate the end resource usage */
 	get_cpu_usage( tep->results->final_cpu_usage );
 	get_cpu_usage_from_proc_stat( tep->results->final_cpu_ps );
@@ -192,9 +196,6 @@ void run_ntttcp_throughput_management(struct ntttcp_test_endpoint *tep)
 	tep->results->final_tx_packets = get_single_value_from_os_file(tep->test->show_interface_packets, "tx");
 	tep->results->final_rx_packets = get_single_value_from_os_file(tep->test->show_interface_packets, "rx");
 	tep->results->final_interrupts = get_interrupts_from_proc_by_dev(tep->test->show_dev_interrupts);
-
-	gettimeofday(&now, NULL);
-	tep->end_time = now;
 
 	/* calculate the actual test run time */
 	actual_test_time = get_time_diff(&tep->end_time, &tep->start_time);
