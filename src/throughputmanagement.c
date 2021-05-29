@@ -151,8 +151,10 @@ void run_ntttcp_throughput_management(struct ntttcp_test_endpoint *tep)
 	last_checkpoint.time = now;
 	tep->start_time = now;
 
+	PRINT_INFO("lbh debug: Start time");
 	/* calculate the initial resource usage */
 	get_cpu_usage( tep->results->init_cpu_usage );
+	PRINT_INFO("lbh debug: cpu usage");
 	get_cpu_usage_from_proc_stat( tep->results->init_cpu_ps );
 	get_tcp_retrans( tep->results->init_tcp_retrans );
 	tep->results->init_tx_packets = get_single_value_from_os_file(tep->test->show_interface_packets, "tx");

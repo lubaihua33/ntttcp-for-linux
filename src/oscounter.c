@@ -32,9 +32,11 @@ void get_cpu_usage_from_proc_stat(struct cpu_usage_from_proc_stat *cups)
 
 	char buffer[256];
 	int cpus = -1;
+	PRINT_INFO("lbh debug: loop begin");
 	do {
 		cpus++;
 		char *s = fgets(buffer, 255, file);
+		PRINT_INFO("lbh debug: fgets end");
 		/* We should not reach to the file end, because we only read lines starting with 'cpu' */
 		if (s == NULL) {
 			PRINT_ERR("Error when reading /proc/stat");
