@@ -156,10 +156,15 @@ void run_ntttcp_throughput_management(struct ntttcp_test_endpoint *tep)
 	get_cpu_usage( tep->results->init_cpu_usage );
 	PRINT_INFO("lbh debug: cpu usage");
 	get_cpu_usage_from_proc_stat( tep->results->init_cpu_ps );
+	PRINT_INFO("lbh debug: cpu usage from proc");
 	get_tcp_retrans( tep->results->init_tcp_retrans );
+	PRINT_INFO("lbh debug: tcp retrans");
 	tep->results->init_tx_packets = get_single_value_from_os_file(tep->test->show_interface_packets, "tx");
+	PRINT_INFO("lbh debug: show tx");
 	tep->results->init_rx_packets = get_single_value_from_os_file(tep->test->show_interface_packets, "rx");
+	PRINT_INFO("lbh debug: show rx");
 	tep->results->init_interrupts = get_interrupts_from_proc_by_dev(tep->test->show_dev_interrupts);
+	PRINT_INFO("lbh debug: show interrupts");
 
 	while(is_light_turned_on()) {
 		/* Wait 500 micro-seconds. We don't want to pull the status too often.
